@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Preguntas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="manage-questions.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <!-- Título dinámico -->
+            <h1 id="management-title">Panel de Gestión de Preguntas</h1>
+            <a href="index.html" class="back-link">Volver al Juego</a>
+        </header>
+
+        <div class="actions">
+            <button id="add-new-question-btn" class="action-btn add">Añadir Nueva Pregunta</button>
+        </div>
+
+        <div id="questions-list">
+            <!-- Las preguntas se cargarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Modal para Añadir/Editar Preguntas -->
+    <div id="question-modal" class="modal-overlay">
+        <div class="modal-content">
+            <form id="question-form">
+                <h2 id="modal-title">Añadir Nueva Pregunta</h2>
+                <input type="hidden" id="question-id">
+                
+                <label for="question-text-input">Texto de la Pregunta:</label>
+                <textarea id="question-text-input" rows="3" required></textarea>
+
+                <label>Respuestas:</label>
+                <div class="answers-container">
+                    <div class="answer-field">
+                        <input type="radio" name="correct-answer" value="0" required>
+                        <input type="text" placeholder="Respuesta A" class="answer-input" required>
+                    </div>
+                    <div class="answer-field">
+                        <input type="radio" name="correct-answer" value="1">
+                        <input type="text" placeholder="Respuesta B" class="answer-input" required>
+                    </div>
+                    <!-- Estos campos se mostrarán/ocultarán con JS -->
+                    <div class="answer-field" data-mode="4_options">
+                        <input type="radio" name="correct-answer" value="2">
+                        <input type="text" placeholder="Respuesta C" class="answer-input">
+                    </div>
+                    <div class="answer-field" data-mode="4_options">
+                        <input type="radio" name="correct-answer" value="3">
+                        <input type="text" placeholder="Respuesta D" class="answer-input">
+                    </div>
+                </div>
+                <div id="form-error"></div>
+                <div class="form-buttons">
+                    <button type="submit" class="action-btn save">Guardar Pregunta</button>
+                    <button type="button" id="cancel-btn" class="action-btn cancel">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="questions_2_options.js"></script>
+    <script src="manage-questions.js"></script>
+</body>
+</html>

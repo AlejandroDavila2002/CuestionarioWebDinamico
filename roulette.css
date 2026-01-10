@@ -1,0 +1,152 @@
+/* --- ESTILOS PARA LA RULETA --- */
+
+:root {
+    --wheel-size: 500px; /* Ajustado para mejor proporción */
+    --pointer-size: 50px;
+    --turn-duration: 5s; /* Desaceleración más corta */
+    /* Nueva curva de desaceleración para un final más suave */
+    --turn-ease: cubic-bezier(0.1, 0.5, 0.2, 1);
+}
+
+#roulette-container {
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+#roulette-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--next-btn-bg);
+    margin-top: 0;
+}
+
+.roulette-wrapper {
+    position: relative;
+    width: var(--wheel-size);
+    height: var(--wheel-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#roulette-pointer {
+    display: block; /* Restauramos el puntero antiguo */
+}
+
+/* NUEVO: Indicador de ganador integrado en el wrapper */
+.roulette-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -5px; /* Ligeramente por encima de la rueda */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px; /* Ancho del indicador */
+    height: 10px; /* Altura */
+    background-color: #f0c419; /* Mismo color dorado */
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%); /* Forma de trapecio */
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+#roulette-wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 8px solid var(--leader-bg);
+    /* Efecto de neón y profundidad */
+    box-shadow: 0 0 25px rgba(0,0,0,0.5), 
+                inset 0 0 20px rgba(0,0,0,0.4),
+                0 0 35px var(--next-btn-bg);
+    background-image: conic-gradient(red 0% 50%, blue 50% 100%); /* Placeholder */
+    position: relative;
+    overflow: hidden;
+    background-color: #333;
+    cursor: pointer; /* El cursor indica que se puede hacer clic */
+}
+
+/* NUEVO: Animación de giro dinámico en bucle */
+.roulette-wheel-dynamic-spin {
+    animation: spin-dynamic 10s ease-in-out infinite; /* Más rápida */
+}
+
+@keyframes spin-dynamic {
+    0% { transform: rotate(0deg); box-shadow: 0 0 25px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.4), 0 0 35px var(--next-btn-bg); }
+    25% { transform: rotate(720deg); } /* Más vueltas */
+    50% { transform: rotate(630deg); box-shadow: 0 0 25px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.4), 0 0 55px var(--next-btn-bg); } /* Brillo más intenso */
+    75% { transform: rotate(-360deg); } /* Cambio de dirección más agresivo */
+    100% { transform: rotate(0deg); box-shadow: 0 0 25px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.4), 0 0 35px var(--next-btn-bg); }
+}
+
+/* Clase para detener la animación y la interacción */
+.roulette-wheel-stopping {
+    cursor: default;
+}
+
+/* NUEVO: Centro de la ruleta para un look más profesional */
+#roulette-wheel::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15%;
+    height: 15%;
+    /* Centro metálico mejorado */
+    background: radial-gradient(circle, #9a9fa5, #36393f 70%);
+    border-radius: 50%;
+    border: 5px solid #23272a;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 11;
+}
+
+.roulette-player-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    transform-origin: 0% 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900; /* Más grueso */
+    color: white;
+    /* NUEVO: Transformación mejorada para legibilidad */
+    transform: rotate(calc(var(--segment-angle) * 1deg));
+    transition: transform 0.3s ease;
+}
+
+/* NUEVO: Animación de resplandor para el ganador */
+@keyframes winner-glow {
+    0%, 100% {
+        text-shadow: 0 0 8px #000, 0 0 20px #FFD700, 0 0 30px #FFD700;
+        transform: rotate(-90deg) scale(1.2);
+    }
+    50% {
+        text-shadow: 0 0 8px #000, 0 0 20px #f0c419, 0 0 45px #f0c419;
+        transform: rotate(-90deg) scale(1.25);
+    }
+}
+.roulette-player-name.winner span {
+    /* Resaltado de ganador mejorado */
+    color: #FFD700; /* Color del puntero */
+    animation: winner-glow 1.5s infinite ease-in-out;
+    z-index: 15; /* Asegurar que el texto del ganador esté por encima */
+}
+
+.roulette-player-name span {
+    /* NUEVO: Rotación para mantener el texto horizontal */
+    transform: rotate(-90deg);
+    transform-origin: center;
+    display: inline-block;
+    padding-left: 50px; /* Distancia desde el centro */
+    font-size: clamp(1rem, calc(200 / var(--player-count) * 1px), 1.5rem); /* Ligeramente más grande */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+}
+
+#spin-btn {
+    display: none; /* Ocultamos el botón de giro */
+}

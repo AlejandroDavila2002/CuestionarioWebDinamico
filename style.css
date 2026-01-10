@@ -1,0 +1,1138 @@
+/* --- ESTILOS CSS --- */
+:root {
+    --bg-color-dark: #2c2f33; 
+    --container-bg-dark: #36393f; 
+    --text-color-light: #f0f2f5;
+    --btn-bg-default: #424549;
+    --btn-border-default: #55585d;
+    --btn-hover-bg: #5a5d63;
+    --correct-color: #4CAF50;
+    --incorrect-color: #F44336;
+    --next-btn-bg: #7289DA; 
+    --next-btn-hover-bg: #677BC4;
+    --leader-bg: #23272a;
+    /* NUEVO MODO EQUIPOS: Colores de equipo */
+    --team-a-color: #a71027; /* Un rojo más oscuro y sofisticado */
+    --team-b-color: #00407A; /* Un azul marino más profundo */
+}
+/* NUEVA MEJORA: Variables para el marco animado */
+:root {
+    --frame-pulse-a: rgba(167, 16, 39, 0.7);
+    --frame-pulse-b: rgba(0, 64, 122, 0.7);
+}
+body {
+    font-family: 'Montserrat', sans-serif; background-color: var(--bg-color-dark);
+    display: flex; justify-content: center; align-items: center; /* Centrado vertical y horizontal */
+    min-height: 100vh; margin: 0;
+    color: var(--text-color-light); transition: background-color 0.5s ease;
+    padding: 2rem 1rem;
+}
+/* NUEVO MODO EQUIPOS: Fondos de equipo */
+/* Ajustes para el contenedor ancho del modo equipos */
+.container.wide-container {
+    max-width: 1200px;
+}
+
+body.team-a-turn {
+    background-image: radial-gradient(circle at center, var(--team-a-color) 0%, var(--bg-color-dark) 70%);
+    background-size: 150% 150%;
+    background-position: center;
+    transition: background-size 0.5s ease;
+}
+body.team-b-turn {
+    background-image: radial-gradient(circle at center, var(--team-b-color) 0%, var(--bg-color-dark) 70%);
+    background-size: 150% 150%;
+    background-position: center;
+    transition: background-size 0.5s ease;
+}
+
+/* NUEVA MEJORA: Fondo animado para fireMode */
+body.fire-background {
+    background-size: 400% 400%;
+    animation: fireGradient 10s ease infinite;
+}
+body.fire-background.team-a-turn {
+    background-image: linear-gradient(-45deg, #9B2335, #C7384D, #E06C7E, #F098A7);
+}
+body.fire-background.team-b-turn {
+    background-image: linear-gradient(-45deg, #00407A, #005A9E, #007CC7, #48A9E6);
+}
+@keyframes fireGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#leader-display {
+    position: fixed; top: 15px; left: 15px; right: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: transparent;
+    z-index: 1000;
+    font-weight: 600;
+    display: none; 
+    animation: slideIn 0.5s ease-out;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+.leader-tag {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--leader-bg);
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    border: 2px solid var(--next-btn-bg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    font-size: 1.2rem;
+    display: inline-block;
+}
+.leader-tag.exploding {
+    animation: explodeOut 0.6s ease-out forwards;
+}
+@keyframes explodeOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+.leader-tag strong {
+    color: var(--next-btn-bg);
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+@keyframes slideIn {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+#stop-game-btn {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--incorrect-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s, transform 0.2s;
+}
+#stop-game-btn:hover {
+    background-color: #c0392b;
+}
+body.flashing-red {
+    animation: pulseGradient 1s infinite;
+}
+@keyframes pulseGradient {
+    0%, 100% { background-size: 150% 150%; }
+    50% { background-size: 170% 170%; }
+}
+#active-players-panel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: fixed;
+    top: 120px;
+    left: 20px;
+    width: 200px;
+    background-color: var(--leader-bg);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    display: none;
+}
+#active-players-panel h3 {
+    margin: 0 0 1rem 0;
+    text-align: center;
+    color: var(--next-btn-bg);
+    font-size: 1.1rem;
+}
+#active-players-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#active-players-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    background-color: var(--btn-bg-default);
+}
+.container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    background-color: var(--container-bg-dark); border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 90%;
+    max-width: 800px; overflow: hidden; padding: 3.5rem;
+    transition: max-width 0.5s ease-in-out; /* Animación para la expansión */
+}
+/* NUEVO: Clase para expandir el contenedor del quiz */
+.container.wide-quiz {
+    max-width: 950px;
+}
+#milestone-message {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(44, 47, 51, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--correct-color);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-out;
+}
+#milestone-message.show {
+    opacity: 1;
+}
+#timer-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--leader-bg);
+    color: var(--text-color-light);
+    font-size: 1.8rem;
+    font-weight: 700;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid var(--next-btn-bg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 100;
+    display: none;
+}
+/* NUEVA MEJORA VISUAL: El borde del timer cambia con el equipo */
+body.team-a-turn #timer-container {
+    border-color: white;
+}
+body.team-b-turn #timer-container {
+    border-color: white;
+}
+body.team-a-turn #timer-container.warning, body.team-b-turn #timer-container.warning {
+    border-color: #f0c419; /* Amarillo para advertencia en modo equipos */
+}
+#timer-container.warning {
+    color: var(--incorrect-color);
+    border-color: var(--incorrect-color);
+    animation: pulseWarning 1s infinite;
+}
+@keyframes pulseWarning {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+#setup-container h2, #mode-selection-container h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    background: linear-gradient(45deg, var(--next-btn-bg), #a1b0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+/* NUEVO: Contenedor para las secciones principales */
+.setup-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.setup-section {
+    background-color: var(--leader-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-top: 3px solid transparent;
+    background-image: linear-gradient(var(--leader-bg), var(--leader-bg)), linear-gradient(to right, var(--next-btn-bg), #a1b0f0);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: flex 0.5s ease-in-out; /* Transición para la expansión */
+}
+.setup-section h3 {
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+    color: var(--text-color-light);
+    font-size: 1.2rem;
+    border-bottom: 2px solid var(--btn-bg-default);
+    padding-bottom: 0.8rem;
+    letter-spacing: 1px; /* Un toque de estilo */
+}
+.setup-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+#player-form { 
+    display: flex; 
+    gap: 10px; 
+    margin-bottom: 1.5rem; 
+    flex-wrap: wrap; /* Para que el select se ajuste */
+}
+#player-name-input {
+    flex-grow: 1; 
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--btn-border-default);
+    background-color: var(--btn-bg-default);
+    color: var(--text-color-light); 
+    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: border-color 0.3s;
+}
+#player-name-input:focus-visible {
+    outline: 2px solid var(--next-btn-bg);
+    outline-offset: 2px;
+}
+#player-name-input:focus { 
+    outline: none; 
+    border-color: var(--next-btn-bg); 
+}
+/* NUEVO MODO EQUIPOS: Estilo para el selector de equipo */
+#player-team-select {
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--btn-border-default);
+    background-color: var(--btn-bg-default);
+    color: var(--text-color-light);
+    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+    display: none; /* Oculto por defecto */
+}
+#add-player-btn {
+    padding: 1rem 1.5rem;
+    background-color: var(--next-btn-bg);
+    color: white; 
+    border: none; 
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer; 
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#add-player-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+#add-player-btn:hover { 
+    background-color: var(--next-btn-hover-bg);
+    transform: scale(1.05);
+}
+#setup-error {
+    color: var(--incorrect-color); 
+    font-weight: 600;
+    text-align: center; 
+    min-height: 20px;
+    margin-bottom: 1rem;
+}
+#player-list {
+    list-style: none; 
+    padding: 0; 
+    margin: 0;
+    max-height: 210px;
+    overflow-y: auto;
+    transition: max-height 0.5s ease-in-out; /* Transición para la altura */
+    padding-right: 10px; /* Espacio para la barra de scroll */
+}
+/* NUEVO: Estilo de la barra de scroll */
+#player-list::-webkit-scrollbar {
+    width: 8px;
+}
+#player-list::-webkit-scrollbar-track {
+    background: var(--leader-bg);
+    border-radius: 4px;
+}
+#player-list::-webkit-scrollbar-thumb {
+    background-color: var(--btn-border-default);
+    border-radius: 4px;
+}
+#player-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--btn-bg-default); 
+    padding: 0.8rem 1rem;
+    border-radius: 6px; 
+    margin-bottom: 8px; 
+    font-weight: 600;
+    animation: fadeIn 0.4s ease-out;
+}
+.player-actions {
+    display: flex;
+    gap: 8px;
+}
+.player-actions > div {
+    background-color: var(--btn-border-default);
+    border-radius: 6px;
+    padding: 4px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.player-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;            
+    font-size: 1.2rem;
+    padding: 0.2rem;
+    line-height: 1;
+    transition: transform 0.2s, outline 0.2s;
+}
+.player-action-btn:focus-visible {
+    outline: 2px solid var(--next-btn-bg);
+    outline-offset: 2px;
+}
+.player-action-btn:hover {
+    transform: scale(1.2);
+}        
+.player-action-btn.edit {
+    color: #4CAF50;
+}
+.player-action-btn.delete {
+    color: #F44336;
+}
+.player-name-text {
+    flex-grow: 1;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+#start-quiz-btn {
+    background-color: var(--correct-color); 
+    display: none; 
+    width: 100%;
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 1.2rem;
+    margin-top: 1rem;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#start-quiz-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+#start-quiz-btn:hover { background-color: #45a049; transform: translateY(-2px); }
+
+/* NUEVO: Contenedor para los botones de acción finales */
+.setup-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#clear-players-btn {
+    background-color: transparent;
+    color: var(--incorrect-color);
+    border: 2px solid var(--incorrect-color);
+    display: none;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#clear-players-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}        
+#clear-players-btn:hover {
+    background-color: var(--incorrect-color);
+    color: white;
+}
+
+/* NUEVO: Estilo para el botón de volver a modos */
+#back-to-modes-btn {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    background-color: transparent;
+    color: var(--text-color-light);
+    border: 2px solid var(--btn-border-default);
+    width: auto;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#back-to-modes-btn:hover {
+    background-color: var(--btn-border-default);
+}
+#back-to-modes-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* NUEVA MEJORA VISUAL: El contenedor del quiz cambia con el equipo */
+#quiz-container { 
+    display: none;
+    transition: box-shadow 0.5s ease, border-color 0.5s ease;
+}
+body.team-a-turn .container {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+body.team-b-turn .container {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+#player-turn-container {
+    text-align: center; margin-bottom: 1.5rem;
+    font-size: 1.5rem; font-weight: 700;
+}
+#player-turn {
+    color: var(--next-btn-bg); font-size: 1.8rem; display: block;
+}
+/* NUEVA MEJORA VISUAL: El nombre del jugador cambia con el color del equipo */
+body.team-a-turn #player-turn, body.team-b-turn #player-turn {
+    color: white;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    font-weight: 900;
+}
+
+#elimination-message {
+    font-size: 1.2rem; font-weight: 700;
+    text-align: center; min-height: 20px; /* Ajustado para que no salte el layout */
+    margin-top: -1rem; margin-bottom: 1rem;
+    transition: color 0.3s;
+}
+#question-text {
+    font-size: 1.6rem; font-weight: 700;
+    line-height: 1.5; color: var(--text-color-light);
+    text-align: center; margin-bottom: 2rem;
+}
+#answer-buttons { 
+    display: grid; 
+    grid-template-columns: 1fr;
+    gap: 1rem; 
+}
+#answer-buttons.two-options {
+    grid-template-columns: 1fr; /* Mantenemos una columna para 2 opciones, se ve mejor en móvil */
+}
+.btn {
+    background-color: var(--btn-bg-default);
+    border: 2px solid var(--btn-border-default); border-radius: 10px;
+    padding: 1.2rem; font-size: 1.1rem; font-weight: 600;
+    color: var(--text-color-light); cursor: pointer; text-align: left;
+    transition: background-color 0.3s, border-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.btn:hover:not(:disabled) {
+    background-color: var(--btn-hover-bg); border-color: var(--next-btn-bg);
+    transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.btn:disabled { cursor: not-allowed; opacity: 0.8; }
+.btn.correct {
+    background-color: var(--correct-color); border-color: var(--correct-color);
+    animation: pulseCorrect 0.6s ease-out;
+}
+.btn.incorrect {
+    background-color: var(--incorrect-color); border-color: var(--incorrect-color);
+    animation: shakeIncorrect 0.4s ease-out;
+}
+@keyframes pulseCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+@keyframes shakeIncorrect { 0% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } 100% { transform: translateX(0); } }
+#next-btn {
+    display: none; width: 100%; background-color: var(--next-btn-bg);
+    border: none; border-radius: 10px; color: white;
+    font-weight: 700; margin-top: 2rem; padding: 1.2rem;
+    font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#next-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}        
+#next-btn:hover { background-color: var(--next-btn-hover-bg); transform: translateY(-2px); }
+#scoreboard { 
+    list-style: none; padding: 0; margin-top: 2rem; width: 100%;
+}
+#scoreboard li {
+    font-size: 1.3rem; font-weight: 600; padding: 1rem;
+    margin-bottom: 0.5rem; border-radius: 8px;
+    background-color: var(--btn-bg-default);
+    display: flex; justify-content: space-between;
+    animation: scorePop 0.5s ease-out forwards; opacity: 0;
+}
+#scoreboard li strong { color: var(--next-btn-bg); }
+#scoreboard li.winner {
+    background-color: var(--correct-color);
+    color: white; font-size: 1.5rem;
+}
+#scoreboard li.winner strong { color: white; }
+#scoreboard li.winner::before { content: '🏆 '; }
+@keyframes scorePop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.setting-item {
+    display: flex;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.toggle-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--btn-bg-default); transition: .4s; border-radius: 34px;
+}
+.slider:before {
+    position: absolute; content: ""; height: 26px; width: 26px;
+    left: 4px; bottom: 4px; background-color: white;
+    transition: .4s; border-radius: 50%;
+}
+input:checked + .slider { background-color: var(--correct-color); }
+input:focus + .slider { box-shadow: 0 0 1px var(--correct-color); }
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+#extra-life-btn {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    background-color: var(--correct-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 1001;
+    display: none; /* Se controla por JS */
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#extra-life-btn:active {
+    transform: translateY(-50%) scale(0.98);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s, transform 0.2s;
+}
+#extra-life-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-50%) scale(1.05);
+}
+.revival-popover {
+    position: fixed;
+    top: 50%;
+    left: 180px;
+    transform: translateY(-50%);
+    width: 350px;
+    background-color: var(--container-bg-dark);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    z-index: 1002;
+    display: none;
+    padding: 1.5rem;
+    border: 2px solid var(--btn-border-default);
+}
+.revival-popover.show {
+    display: block;
+    animation: slideInFromLeft 0.3s ease-out;
+}
+@keyframes slideInFromLeft { from { opacity: 0; transform: translate(-20px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
+.revival-popover h3 { color: var(--next-btn-bg); margin-top: 0; text-align: center; }
+.revival-popover p { font-size: 0.9rem; text-align: center; margin-bottom: 1rem; }
+#revivable-players-list { list-style: none; padding: 0; max-height: 300px; overflow-y: auto; }
+#revivable-players-list li {
+    background-color: var(--btn-bg-default); padding: 1rem;
+    margin-bottom: 10px; border-radius: 8px; font-weight: 600;
+    cursor: pointer; transition: background-color 0.2s;
+}
+#revivable-players-list li:hover { background-color: var(--btn-hover-bg); }
+#revivable-players-list .no-players { cursor: default; text-align: center; font-style: italic; }
+#revivable-players-list .no-players:hover { background-color: var(--btn-bg-default); }
+#manage-questions-link {
+    display: block;
+    text-align: center;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background-color: var(--btn-bg-default);
+    color: var(--text-color-light);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#manage-questions-link:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+#manage-questions-link:hover {
+    background-color: var(--btn-hover-bg);
+}
+
+/* NUEVO: Media Query para el diseño de dos columnas */
+@media (min-width: 768px) {
+    .setup-layout { flex-direction: row; }
+    .add-player-section { flex: 3; } /* 60% del espacio */
+    .game-options-section { flex: 2; } /* 40% del espacio, más ancho */
+    #answer-buttons.two-options {
+        grid-template-columns: 1fr 1fr; /* 2 columnas en escritorio para modo duelo */
+    }
+
+    /* NUEVO: Estilos para el panel expandido en escritorio */
+    .add-player-section.expanded {
+        flex: 5; /* Aumenta el tamaño del panel de jugadores */
+    }
+
+    .add-player-section.expanded #player-list {
+        max-height: 450px; /* Aumenta la altura de la lista */
+    }
+}
+
+/* NUEVO: Estilos específicos para móviles */
+@media (max-width: 767px) {
+    body {
+        padding: 2rem 1rem; /* Menos padding superior en móvil */
+    }
+    .container {
+        padding: 1.5rem; /* Padding más pequeño para los contenedores */
+    }
+    #setup-container h2, #mode-selection-container h2 {
+        font-size: 2rem; /* Título más pequeño */
+    }
+    #question-text {
+        font-size: 1.3rem; /* Texto de pregunta más pequeño */
+        margin-bottom: 1.5rem;
+    }
+    #player-turn-container {
+        font-size: 1.2rem; /* Reducir tamaño del texto de turno */
+    }
+    #player-turn {
+        font-size: 1.5rem; /* Reducir tamaño del nombre del jugador */
+    }
+    .btn {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    #stop-game-btn {
+        padding: 0.6rem 1rem; /* Botón más pequeño */
+        font-size: 0.9rem;
+    }
+    .leader-tag {
+        padding: 0.6rem 1rem; /* Etiquetas de líder más pequeñas */
+        font-size: 1rem;
+    }
+    /* Ocultar paneles laterales que estorban en móvil */
+    #active-players-panel, #extra-life-btn {
+        display: none !important;
+    }
+    #timer-container {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem; /* Texto del temporizador más pequeño */
+        top: 15px;
+        right: 15px;
+        border-width: 3px;
+    }
+}
+
+/* --- ESTILOS PARA manage-questions.html --- */
+/* Estos estilos son para la página de gestión. Idealmente, irían en manage-questions.css */
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 15px;
+    }
+
+    .question-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .question-item-actions {
+        margin-top: 15px;
+        align-self: flex-end; /* Mover botones a la derecha */
+    }
+
+    /* Modal de edición/creación */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .answer-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .answer-field .answer-input {
+        width: 100%;
+    }
+}
+
+#comodin-btn {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: none;
+    background-color: #f0c419;
+    color: var(--leader-bg);
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Sombra inicial */
+    transition: transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#comodin-btn:active {
+    transform: scale(0.98);
+    transition: transform 0.2s;
+}
+#comodin-btn:hover {
+    transform: scale(1.05);
+}
+#skip-btn {
+    display: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #3498db; /* Azul */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Sombra inicial */
+    transition: transform 0.2s, box-shadow 0.2s, outline 0.2s;
+}
+#skip-btn:active {
+    transform: scale(0.98);
+    transition: transform 0.2s;
+}
+#skip-btn:hover { transform: scale(1.05); }
+#wildcard-bar {
+    /* Requisitos de diseño del panel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap; /* Evita que los botones salten de línea */
+    gap: 1.5rem; /* Espaciado entre botones */
+    margin-top: 2rem;
+    padding: 1.5rem; /* Espaciado interno generoso */
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Fondo semitransparente */
+    border-radius: 12px; /* Bordes redondeados */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+/* Ajuste para los botones dentro de la nueva barra para uniformidad */
+#wildcard-bar > button {
+    padding: 0.8rem 1.5rem; /* Padding ligeramente ajustado */
+}
+@keyframes dramatic-disappear {
+    0% { transform: scale(1) rotate(0); opacity: 1; }
+    100% { transform: scale(0) rotate(90deg); opacity: 0; }
+}
+.btn.disappearing {
+    animation: dramatic-disappear 0.5s ease-in forwards;
+}
+/* Estilos para el slider de volumen */
+#music-volume {
+    width: 100px;
+    height: 8px;
+    -webkit-appearance: none;
+    background: var(--btn-border-default);
+    outline: none;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+#music-volume:focus-visible {
+    outline: 2px solid var(--next-btn-bg);
+    transition: opacity .2s;
+}
+#music-volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--next-btn-bg);
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#music-volume::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--next-btn-bg);
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+/* General focus-visible style for all interactive elements */
+*:focus-visible {
+    outline: 2px solid var(--next-btn-bg);
+    outline-offset: 2px;
+}
+
+/* --- NUEVO: Estilos para el panel de selección de modo --- */
+#mode-selection-container {
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+#mode-selection-container.fade-out {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+}
+.mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+    .mode-buttons {
+        flex-direction: row;
+    }
+}
+
+.mode-btn {
+    position: relative;
+    flex: 1;
+    background-color: var(--btn-bg-default);
+    border: 3px solid transparent;
+    border-radius: 12px;
+    padding: 2rem;
+    color: var(--text-color-light);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+}
+
+.mode-btn::before {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    width: 50px;
+    height: 50px;
+    background-color: var(--btn-border-default);
+    transition: all 0.3s ease;
+}
+
+/* Icono para Modo Clásico (4 opciones) */
+.mode-btn[data-mode="4_options"]::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7'%3E%3C/rect%3E%3Crect x='14' y='3' width='7' height='7'%3E%3C/rect%3E%3Crect x='14' y='14' width='7' height='7'%3E%3C/rect%3E%3Crect x='3' y='14' width='7' height='7'%3E%3C/rect%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7'%3E%3C/rect%3E%3Crect x='14' y='3' width='7' height='7'%3E%3C/rect%3E%3Crect x='14' y='14' width='7' height='7'%3E%3C/rect%3E%3Crect x='3' y='14' width='7' height='7'%3E%3C/rect%3E%3C/svg%3E");
+}
+
+/* Icono para Modo Duelo (2 opciones) */
+.mode-btn[data-mode="2_options"]::before {
+     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
+/* NUEVO MODO EQUIPOS: Icono para Duelo de Equipos */
+.mode-btn[data-mode="team_duel"]::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='9' cy='7' r='4'%3E%3C/circle%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87'%3E%3C/path%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'%3E%3C/path%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='9' cy='7' r='4'%3E%3C/circle%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87'%3E%3C/path%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.mode-btn h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 5rem 0 0.5rem 0;
+    color: var(--text-color-light);
+    transition: color 0.3s ease;
+}
+
+.mode-btn:hover {
+    transform: translateY(-5px);
+    background-image: linear-gradient(var(--btn-bg-default), var(--btn-bg-default)), linear-gradient(to right, var(--next-btn-bg), #a1b0f0);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 8px 25px rgba(114, 137, 218, 0.3);
+}
+
+.mode-btn:hover::before {
+    background-color: var(--next-btn-bg);
+    transform: scale(1.1);
+}
+
+.mode-btn:hover h3 {
+    color: var(--next-btn-bg);
+}
+
+.mode-btn:active {
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 4px 15px rgba(114, 137, 218, 0.2);
+}
+
+.mode-btn span {
+    display: block;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    color: #b9bbbe;
+    margin-top: 0;
+}
+
+/* NUEVO MODO EQUIPOS: Estilos para el marcador de equipos */
+#team-scoreboard {
+    display: none; /* Oculto por defecto */
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.team-score {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.team-score.team-a {
+    background-color: var(--team-a-color);
+    color: white;
+}
+.team-score.team-b {
+    background-color: var(--team-b-color);
+    color: white;
+}
+.team-score.active-turn {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.team-score span {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.fire-mode-active {
+    animation: firePulse 1s infinite;
+}
+@keyframes firePulse {
+    0% { box-shadow: 0 8px 20px rgba(240, 196, 25, 0.4); }
+    50% { box-shadow: 0 8px 30px rgba(240, 196, 25, 0.8); }
+    100% { box-shadow: 0 8px 20px rgba(240, 196, 25, 0.4); }
+}
+
+/* NUEVO MODO EQUIPOS: Estilo para el botón de consulta */
+#team-consult-btn {
+    display: none; /* Oculto por defecto */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0c419;
+    color: var(--leader-bg);
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+#team-consult-btn:hover {
+    transform: scale(1.05);
+}
+#team-consult-btn:disabled {
+    background-color: var(--btn-border-default);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* NUEVA MEJORA: Estilo para el botón Doble o Nada */
+#double-or-nothing-btn {
+    display: none; /* Oculto por defecto */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+#double-or-nothing-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 75, 43, 0.6);
+}
+#double-or-nothing-btn:disabled {
+    background: var(--btn-border-default);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* --- NUEVO: Estilos para la animación de puntos --- */
+#point-feedback-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 300; /* Por encima de otros elementos */
+    pointer-events: none; /* No interfiere con los clics */
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.point-feedback-item {
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(255, 215, 0, 0.9); /* Color dorado */
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    animation: growAndFade 1s ease-out forwards;
+}
+
+@keyframes growAndFade {
+    0% { transform: scale(0.5); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* --- NUEVO: Indicador de equipo con esferas --- */
+.team-indicator-sphere {
+    display: inline-block;
+    width: 14px; /* Ligeramente más grande */
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle; /* Alinear con el texto */
+    /* Sombra interior para profundidad y sombra exterior para separación */
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.team-indicator-sphere.team-a {
+    /* Gradiente radial para simular un reflejo de luz */
+    background: radial-gradient(circle at 50% 40%, #d45063, var(--team-a-color) 80%);
+}
+
+.team-indicator-sphere.team-b {
+    /* Gradiente radial para simular un reflejo de luz */
+    background: radial-gradient(circle at 50% 40%, #48a9e6, var(--team-b-color) 80%);
+}
